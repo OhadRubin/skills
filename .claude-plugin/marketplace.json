@@ -1,0 +1,22 @@
+{
+  "name": "ohads_skills",
+  "owner": {
+    "name": "Ohad Rubin",
+    "email": "iohadrubin@gmail.com"
+  },
+  "metadata": {
+    "description": "Ohad's skills collection",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "python-file-splitter",
+      "description": "Split large Python modules into smaller, well-organized files",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/python-file-splitter"
+      ]
+    }
+  ]
+}
