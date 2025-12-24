@@ -4,4 +4,5 @@
 2. If `.skill` file, unzip it to `skills/<skill-name>/`
 3. Add an entry to `.claude-plugin/marketplace.json` in the `plugins` array
 4. Push to the repository
+5. Provide the user with `/plugin install <skill-name>@ohads_skills` to install it
 
