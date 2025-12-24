@@ -17,6 +17,15 @@
       "skills": [
         "./skills/python-file-splitter"
       ]
+    },
+    {
+      "name": "skill-creator",
+      "description": "Create a new skill",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/skill-creator"
+      ]
     }
   ]
 }
