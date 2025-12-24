@@ -99,16 +99,21 @@ def parse_definitions(file_path: str) -> list[dict]:
             "end": r["range"]["end"]["line"],
         })
     
-    # Filter nested classes
-    classes = [d for d in definitions if d["kind"] == "class"]
-    nested = {
-        c["name"] for c in classes
-        for other in classes
-        if other["name"] != c["name"] and other["start"] < c["start"] < other["end"]
+    # Filter any definition fully contained within another
+    contained = {
+        d["name"] for d in definitions
+        for other in definitions
+        if other["name"] != d["name"] and other["start"] < d["start"] and d["end"] < other["end"]
     }
-    definitions = [d for d in definitions if d["name"] not in nested]
+    definitions = [d for d in definitions if d["name"] not in contained]
     definitions.sort(key=lambda d: d["start"])
-    
+
+    # Fix overlapping ranges: each definition ends before the next one starts
+    for i in range(len(definitions) - 1):
+        next_start = definitions[i + 1]["start"]
+        if definitions[i]["end"] >= next_start:
+            definitions[i]["end"] = next_start - 1
+
     return definitions
 
 
@@ -147,13 +152,17 @@ def cmd_write(file_path: str, groupings_path: str):
     
     def find_imports_end():
         last_import_line = 0
-        # Find all "import x" statements
+        # Find all "import x" statements at module level (column 0)
         for r in run_ast_grep("import $$$NAMES", file_path):
+            if r["range"]["start"]["column"] != 0:
+                continue
             end_line = r["range"]["end"]["line"]
             if end_line > last_import_line:
                 last_import_line = end_line
-        # Find all "from x import y" statements
+        # Find all "from x import y" statements at module level (column 0)
         for r in run_ast_grep("from $MODULE import $$$NAMES", file_path):
+            if r["range"]["start"]["column"] != 0:
+                continue
             end_line = r["range"]["end"]["line"]
             if end_line > last_import_line:
                 last_import_line = end_line
@@ -166,9 +175,10 @@ def cmd_write(file_path: str, groupings_path: str):
     
     imports_section = "".join(lines[:find_imports_end()])
     
-    # base.py
+    # base.py - sort by source line order
     base_content = imports_section + "\n"
-    for name in groupings.get("base", []):
+    base_names = sorted(groupings.get("base", []), key=lambda n: definitions.get(n, {}).get("start", 0))
+    for name in base_names:
         base_content += "\n" + extract(name) + "\n"
     (output_dir / "base.py").write_text(base_content)
     print(f"Wrote {output_dir / 'base.py'}")
