@@ -26,6 +26,15 @@
       "skills": [
         "./skills/skill-creator"
       ]
+    },
+    {
+      "name": "skill-spec-generator",
+      "description": "Generate structured skill specifications for independent skill creators",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/skill-spec-generator"
+      ]
     }
   ]
 }
