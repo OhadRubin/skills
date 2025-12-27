@@ -14,6 +14,9 @@ This repository contains Ohad's custom skills for Claude.
 # Available Skills
 
 - [python-file-splitter](./skills/python-file-splitter): Split large Python modules into smaller, well-organized files
+- [skill-creator](./skills/skill-creator): Create a new skill
+- [skill-spec-generator](./skills/skill-spec-generator): Generate structured skill specifications for independent skill creators
+- [diff-since-my-commit](./skills/diff-since-my-commit): Show changes to a git branch since your last commit, filtered to only files you touched
 
 # Try in Claude Code
 
