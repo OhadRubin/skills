@@ -35,6 +35,15 @@
       "skills": [
         "./skills/skill-spec-generator"
       ]
+    },
+    {
+      "name": "diff-since-my-commit",
+      "description": "Show changes to a git branch since your last commit, filtered to only files you touched",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/diff-since-my-commit"
+      ]
     }
   ]
 }
