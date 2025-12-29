@@ -17,6 +17,7 @@ This repository contains Ohad's custom skills for Claude.
 - [skill-creator](./skills/skill-creator): Create a new skill
 - [skill-spec-generator](./skills/skill-spec-generator): Generate structured skill specifications for independent skill creators
 - [diff-since-my-commit](./skills/diff-since-my-commit): Show changes to a git branch since your last commit, filtered to only files you touched
+- [agent-report](./skills/agent-report): Extract and display the final message from a Claude agent JSONL file
 
 # Try in Claude Code
 

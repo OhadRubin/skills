@@ -44,6 +44,15 @@
       "skills": [
         "./skills/diff-since-my-commit"
       ]
+    },
+    {
+      "name": "agent-report",
+      "description": "Extract and display the final message from a Claude agent JSONL file",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/agent-report"
+      ]
     }
   ]
 }
