@@ -9,7 +9,11 @@ Orchestrates the creation of onboarding documentation by coordinating the onboar
 
 ## Procedure
 
-1. Copy `create_onboarding_doc.xml` to the working directory with an appropriate name (e.g., `auth_feature_onboarding.xml`)
+1. Use `cp` to copy `create_onboarding_doc.xml` to the working directory with an appropriate name:
+   ```bash
+   cp /path/to/skill/create_onboarding_doc.xml ./auth_feature_onboarding.xml
+   ```
+   Do NOT Read + Write - use the Bash cp command to preserve the exact template.
 2. Create a todo list with phases from the XML plan
 3. Execute each phase using the appropriate skill:
    - **source-material-gathering** + **key-information-extraction**: Use `onboarding-analyzer`
