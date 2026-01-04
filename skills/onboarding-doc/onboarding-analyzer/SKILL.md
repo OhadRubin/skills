@@ -13,20 +13,14 @@ Gather source material and extract key information from a codebase for onboardin
 
 Create `{name}_source_inventory.md` with the following procedure:
 
-**1.1 Setup BM25 Script**
-- Copy `scripts/search.py` from this skill's directory to the working directory:
-  ```bash
-  cp /path/to/skill/scripts/search.py ./search.py
-  ```
-
-**1.2 Identify Keywords**
+**1.1 Identify Keywords**
 - Identify the most general keyword for the feature (e.g., "auth", "cache", "validation")
 - Break it into related terms (e.g., "auth" → "auth", "login", "token", "session")
 
-**1.3 BM25 Search**
+**1.2 BM25 Search**
 - Uses `git ls-files` to search all tracked files. Pass each term with `-t`:
   ```bash
-  uv run search.py -t auth -t login -t token
+  uv run /path/to/skill/scripts/search.py -t auth -t login -t token
   ```
 - Record top results with path and 1-2 sentence summary
 - For each file found, note:
@@ -34,10 +28,10 @@ Create `{name}_source_inventory.md` with the following procedure:
   - Entry points (main functions, exports)
   - Brief 1-line description
 
-**1.4 Identify Plans/Specs**
+**1.3 Identify Plans/Specs**
 - Search for design docs, specs, requirements:
   ```bash
-  uv run search.py -t spec -t design -t plan
+  uv run /path/to/skill/scripts/search.py -t spec -t design -t plan
   ```
 - Note if absent.
 
