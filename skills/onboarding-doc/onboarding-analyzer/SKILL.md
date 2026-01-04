@@ -1,6 +1,6 @@
 ---
 name: onboarding-analyzer
-description: Gather and analyze source material for onboarding documentation. Use when creating an inventory of code files, existing docs, and plans for a codebase, AND when extracting key information (functions, APIs, data flow) from those sources. Triggers on requests like "analyze this codebase for onboarding", "create source inventory", "extract key functions", or "map the data flow".
+description: Gather and analyze source material for onboarding documentation. Creates source_inventory.md and extraction_tables.md. Triggered by onboarding-start during source-material-gathering and key-information-extraction phases.
 ---
 
 # Onboarding Analyzer

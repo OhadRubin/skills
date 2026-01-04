@@ -1,6 +1,6 @@
 ---
 name: onboarding-gaps-verifier
-description: Identify documentation gaps, pitfalls, and verify onboarding documents. Use when analyzing extracted code information to find non-obvious requirements, ordering dependencies, and common errors. Also use to verify a completed onboarding document for accuracy and completeness. Triggers on requests like "find documentation gaps", "identify pitfalls", "what's non-obvious", "verify this onboarding doc", or "check line numbers".
+description: Identify documentation gaps, pitfalls, and verify onboarding documents. Creates gaps_pitfalls.md and verification_log.md. Triggered by onboarding-start during gaps-pitfalls-identification and verification phases.
 ---
 
 # Onboarding Gaps Verifier

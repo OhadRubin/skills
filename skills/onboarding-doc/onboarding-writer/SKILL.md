@@ -1,6 +1,6 @@
 ---
 name: onboarding-writer
-description: Synthesize analyzed codebase information into a structured onboarding document. Use when you have source inventory, extraction tables, and gaps/pitfalls analysis ready to be combined into a final onboarding document. Triggers on requests like "write the onboarding doc", "create onboarding documentation", "synthesize the analysis into a doc", or "generate the final document".
+description: Synthesize analyzed codebase information into a structured onboarding document. Creates onboarding_doc.md. Triggered by onboarding-start during document-writing phase.
 ---
 
 # Onboarding Writer

@@ -60,6 +60,7 @@
       "source": "./",
       "strict": false,
       "skills": [
+        "./skills/onboarding-doc/onboarding-start",
         "./skills/onboarding-doc/onboarding-analyzer",
         "./skills/onboarding-doc/onboarding-gaps-verifier",
         "./skills/onboarding-doc/onboarding-writer"

@@ -1,0 +1,554 @@
+<plan>
+    <motivation>
+    Developers often need to understand and implement features in unfamiliar codebases.
+    Traditional documentation is either too high-level (architecture diagrams) or too low-level (inline comments).
+    There's a gap for "onboarding documents" - focused guides that help a developer implement a specific feature
+    by providing just enough context: what to read, what order to do things, and what pitfalls to avoid.
+    </motivation>
+
+    <goal>
+    Create a high-level onboarding document from source code and existing documentation.
+    The document should be concise, table-heavy, with line numbers that guide developers through
+    implementing or understanding a specific feature, phase, or module.
+    </goal>
+
+    <phase id="source-material-gathering">
+        <description>
+        Gather and index all source material needed for the onboarding document.
+        This includes identifying code files, existing docs, and any plans or specifications.
+        The output is a structured inventory of what needs to be analyzed.
+
+        Workflow overview:
+        1. Gather Source Material - Identify code files, existing docs, plans
+        2. Extract Key Information - Functions, APIs, data flow, config patterns
+        3. Identify Gaps and Pitfalls - Non-obvious items, ordering, errors, assumptions
+        4. Write the Document - Goal, What to Read First, Current State, etc.
+        5. Verify Completeness - Check implementability, accuracy, high-level, order
+        </description>
+
+        <relevant_questions>
+            <question id="q1" reason="Need to understand scope">What feature/phase is being documented?</question>
+            <question id="q2" reason="Need entry points">Which files are the main implementation files?</question>
+            <question id="q3" reason="Avoid duplication">What existing documentation exists?</question>
+        </relevant_questions>
+
+        <open_questions>
+            <question id="oq1" text="How to handle very large codebases with hundreds of relevant files?"/>
+            <question id="oq2" text="Should we prioritize recently modified files?"/>
+        </open_questions>
+
+        <!-- Sub-phase 1.1 -->
+        <phase id="identify-code-files">
+            <description>
+            Use glob/grep to find implementation files for the target feature.
+            Record file paths and identify entry points (main functions, exports).
+            </description>
+            <artifacts>
+                <artifact path="source_inventory.md" reason_or_desc="List of code files with brief descriptions"/>
+            </artifacts>
+            <success_criteria>
+            - All relevant code files identified
+            - Entry points marked
+            - File paths verified to exist
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 1.2 -->
+        <phase id="identify-existing-docs">
+            <description>
+            Find READMEs, design docs, SDK notes, and any existing documentation
+            that might inform or be referenced in the onboarding doc.
+            </description>
+            <artifacts>
+                <artifact path="source_inventory.md" reason_or_desc="Appended with doc file references"/>
+            </artifacts>
+            <success_criteria>
+            - All relevant documentation identified
+            - Each doc summarized in 1-2 sentences
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 1.3 -->
+        <phase id="identify-plans-specs">
+            <description>
+            Locate any requirements, phase specifications, or design plans
+            that define what the feature should do.
+            </description>
+            <artifacts>
+                <artifact path="source_inventory.md" reason_or_desc="Appended with plan/spec references"/>
+            </artifacts>
+            <success_criteria>
+            - Plans and specs identified (or noted as absent)
+            - Key requirements extracted
+            </success_criteria>
+        </phase>
+
+        <artifacts>
+            <artifact path="source_inventory.md" reason_or_desc="Complete inventory of all source material"/>
+        </artifacts>
+
+        <gates>
+            <!-- No gates - this is the first phase -->
+        </gates>
+
+        <gating>
+            <gating_element id="key-information-extraction" reason="Cannot extract info without knowing what to read"/>
+        </gating>
+
+        <non_goals>
+            <non_goal description="Deep code analysis" future_phase="key-information-extraction"/>
+            <non_goal description="Writing the final document" future_phase="document-writing"/>
+        </non_goals>
+
+        <success_criteria>
+        - source_inventory.md exists with all three sections (code, docs, plans)
+        - Each file path verified to exist
+        - At least one entry point identified
+        </success_criteria>
+    </phase>
+
+    <!-- Phase 2 -->
+    <phase id="key-information-extraction">
+        <description>
+        Read and analyze the source material to extract key information:
+        function names, purposes, line numbers, API calls, data flow,
+        and configuration patterns. Output structured tables.
+
+        From code files, extract:
+        - Function names and their purposes (with line numbers)
+        - API calls or external dependencies
+        - Data flow (what calls what)
+        - Configuration and initialization patterns
+
+        Organize as tables:
+        | Function | Lines | Purpose |
+        |----------|-------|---------|
+        | `foo()` | 42-50 | Does X |
+        </description>
+
+        <relevant_questions>
+            <question id="q4" reason="Need to identify what's important">What are the main functions/classes?</question>
+            <question id="q5" reason="Need to map dependencies">What calls what?</question>
+            <question id="q6" reason="Need external context">What external APIs are used?</question>
+        </relevant_questions>
+
+        <open_questions>
+            <question id="oq3" text="How deep to go in the call graph?"/>
+            <question id="oq4" text="Should we include test files in the analysis?"/>
+        </open_questions>
+
+        <relevant_files>
+            <file path="source_inventory.md" reason="Lists all files to analyze"/>
+        </relevant_files>
+
+        <!-- Sub-phase 2.1 -->
+        <phase id="extract-functions">
+            <description>
+            For each code file, extract function/method names, their line ranges,
+            and a one-line purpose description. Output as markdown table.
+            </description>
+            <artifacts>
+                <artifact path="extraction_tables.md" reason_or_desc="Function table with columns: Function, Lines, Purpose"/>
+            </artifacts>
+            <success_criteria>
+            - All public functions documented
+            - Line numbers accurate (verified by spot-check)
+            - Purpose descriptions are actionable (verb + object)
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 2.2 -->
+        <phase id="extract-dependencies">
+            <description>
+            Identify API calls, imports, and external dependencies.
+            Map which functions call which external services/libraries.
+            </description>
+            <artifacts>
+                <artifact path="extraction_tables.md" reason_or_desc="Appended with dependency table"/>
+            </artifacts>
+            <success_criteria>
+            - All external dependencies listed
+            - Each dependency has version/source noted
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 2.3 -->
+        <phase id="map-data-flow">
+            <description>
+            Create a simplified data flow: what calls what, in what order.
+            Identify the "happy path" through the code.
+            </description>
+            <artifacts>
+                <artifact path="extraction_tables.md" reason_or_desc="Appended with data flow section"/>
+            </artifacts>
+            <success_criteria>
+            - Entry point to exit point flow documented
+            - Key decision points noted
+            </success_criteria>
+        </phase>
+
+        <artifacts>
+            <artifact path="extraction_tables.md" reason_or_desc="All extracted information in table format"/>
+        </artifacts>
+
+        <gates>
+            <gate_element id="source-material-gathering" reason="Need inventory before extraction"/>
+        </gates>
+
+        <gating>
+            <gating_element id="gaps-pitfalls-identification" reason="Need extracted info to identify gaps"/>
+            <gating_element id="document-writing" reason="Tables feed directly into document"/>
+        </gating>
+
+        <non_goals>
+            <non_goal description="Identifying what's missing or confusing" future_phase="gaps-pitfalls-identification"/>
+        </non_goals>
+
+        <success_criteria>
+        - extraction_tables.md contains function table, dependency table, and data flow
+        - All line numbers verified accurate
+        - No placeholder text remains
+        </success_criteria>
+    </phase>
+
+    <!-- Phase 3 -->
+    <phase id="gaps-pitfalls-identification">
+        <description>
+        Analyze the extracted information to identify:
+        - What's not obvious from reading the code
+        - Required ordering of operations
+        - Likely errors a developer might hit
+        - Wrong assumptions someone might make
+
+        Key questions to ask:
+        - What's not obvious from reading the code?
+        - What order must things be done in?
+        - What errors might someone hit?
+        - What assumptions might be wrong?
+        </description>
+
+        <relevant_questions>
+            <question id="q7" reason="Find hidden complexity">What requires domain knowledge?</question>
+            <question id="q8" reason="Prevent mistakes">What breaks if done out of order?</question>
+            <question id="q9" reason="Save debugging time">What error messages are misleading?</question>
+        </relevant_questions>
+
+        <open_questions>
+            <question id="oq5" text="Should we include performance pitfalls or just correctness?"/>
+        </open_questions>
+
+        <relevant_files>
+            <file path="extraction_tables.md" reason="Contains the analyzed code structure"/>
+        </relevant_files>
+
+        <!-- Sub-phase 3.1 -->
+        <phase id="identify-non-obvious">
+            <description>
+            Review extracted info and source code to find:
+            - Implicit assumptions in the code
+            - Required environment setup not mentioned
+            - Magic values or conventions
+            </description>
+            <artifacts>
+                <artifact path="gaps_pitfalls.md" reason_or_desc="Non-obvious requirements section"/>
+            </artifacts>
+            <success_criteria>
+            - At least 3 non-obvious items identified (or explicit "none found")
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 3.2 -->
+        <phase id="identify-ordering">
+            <description>
+            Determine what must be done in what order:
+            - Initialization sequences
+            - Setup before use
+            - Teardown requirements
+            </description>
+            <artifacts>
+                <artifact path="gaps_pitfalls.md" reason_or_desc="Ordering requirements section"/>
+            </artifacts>
+            <success_criteria>
+            - All ordering dependencies documented
+            - Circular dependencies noted (if any)
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 3.3 -->
+        <phase id="identify-common-errors">
+            <description>
+            Based on code analysis and any available issue trackers/logs,
+            identify errors developers are likely to encounter.
+            </description>
+            <artifacts>
+                <artifact path="gaps_pitfalls.md" reason_or_desc="Common errors section with solutions"/>
+            </artifacts>
+            <success_criteria>
+            - At least 3 common errors documented (or explicit "none found")
+            - Each error has prevention/solution
+            </success_criteria>
+        </phase>
+
+        <artifacts>
+            <artifact path="gaps_pitfalls.md" reason_or_desc="Complete gaps and pitfalls analysis"/>
+        </artifacts>
+
+        <gates>
+            <gate_element id="key-information-extraction" reason="Need extracted info to identify gaps"/>
+        </gates>
+
+        <gating>
+            <gating_element id="document-writing" reason="Pitfalls section needs this analysis"/>
+        </gating>
+
+        <non_goals>
+            <non_goal description="Writing prose documentation" future_phase="document-writing"/>
+        </non_goals>
+
+        <success_criteria>
+        - gaps_pitfalls.md has all three sections
+        - Each pitfall has actionable mitigation
+        - Ordering is expressed as numbered list
+        </success_criteria>
+    </phase>
+
+    <!-- Phase 4 -->
+    <phase id="document-writing">
+        <description>
+        Synthesize all gathered information into the final onboarding document
+        following this structure:
+
+        # [Feature] Onboarding
+
+        ## Goal
+        One paragraph: what this achieves and why.
+
+        ## What to Read First
+        Numbered list of files with brief descriptions.
+
+        ## Current State
+        Table of key functions/components with line numbers.
+
+        ## What Changes / How to Implement
+        Ordered steps, each with:
+        - What to do
+        - Why (if non-obvious)
+
+        ## Verification
+        Bullet list of how to confirm success.
+
+        ## Pitfalls
+        Numbered list of common mistakes.
+
+        ## Files
+        Table of files to create/modify.
+        </description>
+
+        <relevant_questions>
+            <question id="q10" reason="Ensure completeness">Can someone implement using only this doc?</question>
+            <question id="q11" reason="Ensure accuracy">Are file paths and line numbers still accurate?</question>
+        </relevant_questions>
+
+        <relevant_files>
+            <file path="source_inventory.md" reason="File list for 'What to Read First'"/>
+            <file path="extraction_tables.md" reason="Tables for 'Current State'"/>
+            <file path="gaps_pitfalls.md" reason="Content for 'Pitfalls' section"/>
+        </relevant_files>
+
+        <!-- Sub-phase 4.1 -->
+        <phase id="write-goal-and-prereqs">
+            <description>
+            Write the Goal section (one paragraph) and What to Read First section
+            (numbered list with brief descriptions).
+            </description>
+            <artifacts>
+                <artifact path="onboarding_doc.md" reason_or_desc="Initial sections of final document"/>
+            </artifacts>
+            <success_criteria>
+            - Goal is one paragraph, explains what and why
+            - What to Read First has 3-7 items in dependency order
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 4.2 -->
+        <phase id="write-current-state">
+            <description>
+            Write the Current State section using the extraction tables.
+            Include function table with line numbers.
+            </description>
+            <artifacts>
+                <artifact path="onboarding_doc.md" reason_or_desc="Current State section added"/>
+            </artifacts>
+            <success_criteria>
+            - Table format: | Function | Lines | Purpose |
+            - Line numbers verified accurate
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 4.3 -->
+        <phase id="write-implementation-steps">
+            <description>
+            Write the "What Changes / How to Implement" section.
+            Ordered steps, each with what to do and why (if non-obvious).
+            </description>
+            <artifacts>
+                <artifact path="onboarding_doc.md" reason_or_desc="Implementation steps added"/>
+            </artifacts>
+            <success_criteria>
+            - Steps are in dependency order
+            - Each step has clear action
+            - Non-obvious steps have "why" explanation
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 4.4 -->
+        <phase id="write-verification-and-pitfalls">
+            <description>
+            Write Verification (how to confirm success) and Pitfalls sections.
+            Also add Files table (files to create/modify).
+            </description>
+            <artifacts>
+                <artifact path="onboarding_doc.md" reason_or_desc="Final sections added"/>
+            </artifacts>
+            <success_criteria>
+            - Verification has testable criteria
+            - Pitfalls numbered with mitigations
+            - Files table has path, action, and reason columns
+            </success_criteria>
+        </phase>
+
+        <artifacts>
+            <artifact path="onboarding_doc.md" reason_or_desc="Complete onboarding document"/>
+        </artifacts>
+
+        <gates>
+            <gate_element id="key-information-extraction" reason="Need tables for Current State"/>
+            <gate_element id="gaps-pitfalls-identification" reason="Need pitfalls analysis"/>
+        </gates>
+
+        <gating>
+            <gating_element id="verification" reason="Document must exist before verification"/>
+        </gating>
+
+        <non_goals>
+            <non_goal description="Including detailed code snippets" future_phase="none"/>
+        </non_goals>
+
+        <format>
+        Markdown with:
+        - Tables (not prose) for structured data
+        - Line numbers in format `file.py:42-50`
+        - Minimal code (only signatures or one-liners)
+        </format>
+
+        <style_guidelines>
+        - High-level: Describe what to do, not exact code
+        - Tables over prose: Use tables for structured info
+        - Line numbers: Include for navigation
+        - Minimal code: Only show signatures or one-liners
+        - Dependency order: List steps in the order they must be done
+        </style_guidelines>
+
+        <success_criteria>
+        - All 7 sections present (Goal, What to Read First, Current State, What Changes, Verification, Pitfalls, Files)
+        - Follows style guidelines above
+        - No code blocks longer than 3 lines
+        </success_criteria>
+    </phase>
+
+    <!-- Phase 5 -->
+    <phase id="verification">
+        <description>
+        Verify the onboarding document is complete, accurate, and usable.
+
+        Completeness checklist:
+        - [ ] Can someone implement using only this doc?
+        - [ ] Are file paths and line numbers accurate?
+        - [ ] Is it high-level (minimal code snippets)?
+        - [ ] Are all steps in dependency order?
+        </description>
+
+        <relevant_questions>
+            <question id="q12" reason="Core quality check">Can someone implement using only this doc?</question>
+            <question id="q13" reason="Accuracy check">Are all file paths and line numbers current?</question>
+        </relevant_questions>
+
+        <relevant_files>
+            <file path="onboarding_doc.md" reason="Document to verify"/>
+        </relevant_files>
+
+        <!-- Sub-phase 5.1 -->
+        <phase id="verify-accuracy">
+            <description>
+            Spot-check that file paths exist and line numbers are accurate.
+            Verify at least 3 line number references.
+            </description>
+            <artifacts>
+                <artifact path="verification_log.md" reason_or_desc="Record of verified items"/>
+            </artifacts>
+            <success_criteria>
+            - 3+ line numbers verified
+            - All file paths exist
+            - Any inaccuracies fixed
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 5.2 -->
+        <phase id="verify-completeness">
+            <description>
+            Run through the completeness checklist:
+            - Can implement with only this doc?
+            - High-level (minimal code)?
+            - Steps in dependency order?
+            </description>
+            <artifacts>
+                <artifact path="verification_log.md" reason_or_desc="Checklist results appended"/>
+            </artifacts>
+            <success_criteria>
+            - All 4 checklist items pass
+            - Any failures addressed in document
+            </success_criteria>
+        </phase>
+
+        <!-- Sub-phase 5.3 -->
+        <phase id="final-review">
+            <description>
+            Final read-through for style compliance:
+            - Tables over prose
+            - Minimal code snippets
+            - Clear dependency ordering
+            </description>
+            <artifacts>
+                <artifact path="onboarding_doc.md" reason_or_desc="Final polished document"/>
+                <artifact path="verification_log.md" reason_or_desc="Complete verification record"/>
+            </artifacts>
+            <success_criteria>
+            - Style guidelines met
+            - Document ready for delivery
+            </success_criteria>
+        </phase>
+
+        <artifacts>
+            <artifact path="onboarding_doc.md" reason_or_desc="Verified final document"/>
+            <artifact path="verification_log.md" reason_or_desc="Verification audit trail"/>
+        </artifacts>
+
+        <gates>
+            <gate_element id="document-writing" reason="Document must exist to verify"/>
+        </gates>
+
+        <gating>
+            <!-- No gating - this is the final phase -->
+        </gating>
+
+        <non_goals>
+            <non_goal description="Adding new content" future_phase="none - iteration would restart at phase 1"/>
+        </non_goals>
+
+        <success_criteria>
+        - verification_log.md shows all checks passed
+        - onboarding_doc.md passes completeness checklist
+        - Document is ready for delivery to requesting user
+        </success_criteria>
+    </phase>
+</plan>
