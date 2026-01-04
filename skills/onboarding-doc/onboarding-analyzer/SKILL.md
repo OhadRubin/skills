@@ -11,36 +11,45 @@ Gather source material and extract key information from a codebase for onboardin
 
 ### Phase 1: Source Material Gathering
 
-Create `source_inventory.md` with three sections:
+Create `{name}_source_inventory.md` with the following procedure:
 
-**1.1 Identify Code Files**
+**1.1 Index the Codebase**
 ```bash
-# Find implementation files
-find . -name "*.py" -o -name "*.ts" -o -name "*.js" | head -20
-# Or use glob/grep to find specific features
+uv run scripts/search.py index /path/to/codebase -o .bm25_index
 ```
 
-Record:
-- File paths
-- Entry points (main functions, exports)
-- Brief 1-line description of each file
+**1.2 Identify Keywords**
+- Identify the most general keyword for the feature (e.g., "auth", "cache", "validation")
+- Break it into related terms (e.g., "auth" → "auth", "login", "token", "session")
 
-**1.2 Identify Existing Docs**
-```bash
-find . -name "README*" -o -name "*.md" | head -20
-```
+**1.3 BM25 Search**
+- Use `search.py` to find relevant files. Pass each term separately with `-t`:
+  ```bash
+  uv run scripts/search.py search -t auth -t login -t token
+  ```
+- Record top results with path and 1-2 sentence summary
 
-For each doc:
-- Path
-- 1-2 sentence summary
+**1.4 Targeted rg Search**
+- Use `rg` for specific pattern matching:
+  ```bash
+  rg -l "auth" --type py
+  rg -l "authenticate" --type py
+  ```
+- Record:
+  - File paths
+  - Entry points (main functions, exports)
+  - Brief 1-line description
 
-**1.3 Identify Plans/Specs**
-
-Locate requirements, specs, or design docs. Note if absent.
+**1.5 Identify Plans/Specs**
+- Search for design docs, specs, requirements:
+  ```bash
+  rg -l "spec\|design\|requirement" --type md
+  ```
+- Note if absent.
 
 ### Phase 2: Key Information Extraction
 
-Create `extraction_tables.md` with structured tables:
+Create `{name}_extraction_tables.md` with structured tables:
 
 **2.1 Function Table**
 
@@ -78,12 +87,14 @@ During extraction:
 
 ## Success Criteria
 
-`source_inventory.md`:
-- [ ] Code, docs, plans sections present
-- [ ] File paths verified to exist
-- [ ] At least one entry point identified
+`{name}_source_inventory.md`:
+- [ ] BM25 index created
+- [ ] Keywords and related terms listed
+- [ ] Files found via BM25 search with summaries
+- [ ] Code files with entry points identified (via rg)
+- [ ] Plans/specs noted (or marked absent)
 
-`extraction_tables.md`:
+`{name}_extraction_tables.md`:
 - [ ] Function table with accurate line numbers
 - [ ] Dependency table with versions
 - [ ] Data flow from entry to exit documented

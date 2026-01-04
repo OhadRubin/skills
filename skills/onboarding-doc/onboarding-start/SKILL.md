@@ -1,6 +1,6 @@
 ---
 name: onboarding-start
-description: Create comprehensive onboarding documentation for a codebase or feature. Use when user asks to "create an onboarding document", "document this codebase for new developers", "write onboarding docs for X", or similar requests for developer onboarding documentation.
+description: Create comprehensive onboarding documentation for a codebase or feature. Use when user asks to "create an onboarding document for X".
 ---
 
 # Onboarding Document Creator
