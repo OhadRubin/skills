@@ -53,6 +53,17 @@
       "skills": [
         "./skills/agent-report"
       ]
+    },
+    {
+      "name": "onboarding-doc",
+      "description": "Create onboarding documentation for codebases: analyze source material, extract key info, identify gaps/pitfalls, and write structured docs",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/onboarding-doc/onboarding-analyzer",
+        "./skills/onboarding-doc/onboarding-gaps-verifier",
+        "./skills/onboarding-doc/onboarding-writer"
+      ]
     }
   ]
 }

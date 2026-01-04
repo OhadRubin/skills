@@ -18,6 +18,7 @@ This repository contains Ohad's custom skills for Claude.
 - [skill-spec-generator](./skills/skill-spec-generator): Generate structured skill specifications for independent skill creators
 - [diff-since-my-commit](./skills/diff-since-my-commit): Show changes to a git branch since your last commit, filtered to only files you touched
 - [agent-report](./skills/agent-report): Extract and display the final message from a Claude agent JSONL file
+- [onboarding-doc](./skills/onboarding-doc): Create onboarding documentation for codebases (includes analyzer, gaps-verifier, and writer skills)
 
 # Try in Claude Code
 
