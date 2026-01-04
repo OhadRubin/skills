@@ -13,4 +13,4 @@ Find conceptual gaps by running three phases in sequence. Each phase is a separa
 2. Invoke `plan-gap-critic` skill (uses Phase 1 output from conversation)
 3. Invoke `plan-gap-refiner` skill (uses Phase 2 output from conversation)
 
-Each skill invocation forces a thinking break. Do not combine phases.
+**IMPORTANT:** Do NOT stop between phases. Output what each phase requires, then immediately continue to the next skill. Run all three phases in a single turn.
