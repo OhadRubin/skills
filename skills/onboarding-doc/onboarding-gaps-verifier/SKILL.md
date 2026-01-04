@@ -1,6 +1,6 @@
 ---
 name: onboarding-gaps-verifier
-description: Identify documentation gaps, pitfalls, and verify onboarding documents. Creates gaps_pitfalls.md and verification_log.md. Triggered by onboarding-start during gaps-pitfalls-identification and verification phases.
+description: Identify documentation gaps and pitfalls. Creates gaps_pitfalls.md. Triggered by onboarding-start during gaps-pitfalls-identification phase.
 ---
 
 # Onboarding Gaps Verifier
@@ -64,48 +64,11 @@ Example format:
 | Silent failure | Empty input list | Validate input length |
 ```
 
-### Phase 2: Document Verification
-
-Create `verification_log.md` with verification results:
-
-**2.1 Accuracy Check**
-
-Spot-check at least 3 line number references:
-```markdown
-## Accuracy Verification
-
-| Reference | Verified | Notes |
-|-----------|----------|-------|
-| `main.py:42` | Yes | Correct |
-| `api.py:100` | No | Now at line 105 |
-```
-
-Verify all file paths exist.
-
-**2.2 Completeness Checklist**
-
-- [ ] Can someone implement using only this doc?
-- [ ] Are file paths and line numbers accurate?
-- [ ] Is it high-level (minimal code snippets)?
-- [ ] Are all steps in dependency order?
-
-**2.3 Style Compliance**
-
-- [ ] Tables over prose for structured data
-- [ ] Minimal code snippets (max 3 lines)
-- [ ] Clear dependency ordering
-- [ ] No placeholder text remains
-
 ## Key Questions
 
-For gaps analysis:
 - What requires domain knowledge?
 - What breaks if done out of order?
 - What error messages are misleading?
-
-For verification:
-- Can someone implement using only this doc?
-- Are all file paths and line numbers current?
 
 ## Success Criteria
 
@@ -113,8 +76,3 @@ For verification:
 - [ ] At least 3 non-obvious items (or explicit "none found")
 - [ ] All ordering dependencies documented
 - [ ] At least 3 common errors with solutions (or explicit "none found")
-
-`verification_log.md`:
-- [ ] 3+ line numbers verified
-- [ ] All 4 completeness checklist items pass
-- [ ] All style compliance items pass

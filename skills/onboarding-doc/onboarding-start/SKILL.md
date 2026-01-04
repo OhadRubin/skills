@@ -21,7 +21,6 @@ Orchestrates the creation of onboarding documentation by coordinating the onboar
    - **source-material-gathering** + **key-information-extraction**: Use `onboarding-analyzer`
    - **gaps-pitfalls-identification**: Use `onboarding-gaps-verifier`
    - **document-writing**: Use `onboarding-writer`
-   - **verification**: Use `onboarding-gaps-verifier`
 4. When a phase is finished:
    - Set `status="completed"` on the phase element in the XML file
    - Mark the corresponding todo item as completed
@@ -36,4 +35,3 @@ Name artifacts appropriately for the feature being documented (e.g., `auth_sourc
 | 1-2 | `{name}_source_inventory.md`, `{name}_extraction_tables.md` | onboarding-analyzer |
 | 3 | `{name}_gaps_pitfalls.md` | onboarding-gaps-verifier |
 | 4 | `{name}_onboarding_doc.md` | onboarding-writer |
-| 5 | `{name}_verification_log.md` | onboarding-gaps-verifier |
