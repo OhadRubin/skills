@@ -19,19 +19,14 @@ Create `{name}_source_inventory.md` with the following procedure:
   cp /path/to/skill/scripts/search.py ./search.py
   ```
 
-**1.2 Index the Codebase**
-```bash
-uv run search.py index . -o .bm25_index
-```
-
-**1.3 Identify Keywords**
+**1.2 Identify Keywords**
 - Identify the most general keyword for the feature (e.g., "auth", "cache", "validation")
 - Break it into related terms (e.g., "auth" → "auth", "login", "token", "session")
 
-**1.4 BM25 Search**
-- Use `search.py` to find relevant files. Pass each term separately with `-t`:
+**1.3 BM25 Search**
+- Uses `git ls-files` to search all tracked files. Pass each term with `-t`:
   ```bash
-  uv run search.py search -t auth -t login -t token
+  uv run search.py -t auth -t login -t token
   ```
 - Record top results with path and 1-2 sentence summary
 - For each file found, note:
@@ -39,10 +34,10 @@ uv run search.py index . -o .bm25_index
   - Entry points (main functions, exports)
   - Brief 1-line description
 
-**1.5 Identify Plans/Specs**
+**1.4 Identify Plans/Specs**
 - Search for design docs, specs, requirements:
   ```bash
-  uv run search.py search -t spec -t design -t requirement
+  uv run search.py -t spec -t design -t plan
   ```
 - Note if absent.
 
@@ -87,7 +82,6 @@ During extraction:
 ## Success Criteria
 
 `{name}_source_inventory.md`:
-- [ ] BM25 index created
 - [ ] Keywords and related terms listed
 - [ ] Files found via BM25 search with summaries and entry points
 - [ ] Plans/specs noted (or marked absent)
