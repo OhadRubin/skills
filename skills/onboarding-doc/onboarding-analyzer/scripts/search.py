@@ -82,17 +82,22 @@ def search_command(args):
     stemmer = Stemmer.Stemmer("english")
     query_tokens = bm25s.tokenize(query, stemmer=stemmer)
 
-    # Search
-    results, scores = retriever.retrieve(query_tokens, k=args.top_k)
+    # Search - pass corpus to get documents directly
+    k = min(args.top_k, len(file_paths))
+    results, scores = retriever.retrieve(query_tokens, corpus=file_paths, k=k)
 
     print(f"Terms: {terms}")
     print(f"Query: {query}\n")
     found = 0
     for i in range(results.shape[1]):
-        idx = results[0, i]
+        result = results[0, i]
         score = scores[0, i]
         if score > 0:
-            file_path = file_paths[idx]
+            # result is a dict with 'id' and 'text' when corpus is passed
+            if isinstance(result, dict):
+                file_path = result.get("text", str(result))
+            else:
+                file_path = str(result)
             print(f"Rank {i+1} (score: {score:.2f}): {file_path}")
             found += 1
 
