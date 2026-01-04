@@ -34,22 +34,15 @@ uv run search.py index . -o .bm25_index
   uv run search.py search -t auth -t login -t token
   ```
 - Record top results with path and 1-2 sentence summary
-
-**1.5 Targeted rg Search**
-- Use `rg` for specific pattern matching:
-  ```bash
-  rg -l "auth" --type py
-  rg -l "authenticate" --type py
-  ```
-- Record:
-  - File paths
+- For each file found, note:
+  - File path
   - Entry points (main functions, exports)
   - Brief 1-line description
 
-**1.6 Identify Plans/Specs**
+**1.5 Identify Plans/Specs**
 - Search for design docs, specs, requirements:
   ```bash
-  rg -l "spec\|design\|requirement" --type md
+  uv run search.py search -t spec -t design -t requirement
   ```
 - Note if absent.
 
@@ -96,8 +89,7 @@ During extraction:
 `{name}_source_inventory.md`:
 - [ ] BM25 index created
 - [ ] Keywords and related terms listed
-- [ ] Files found via BM25 search with summaries
-- [ ] Code files with entry points identified (via rg)
+- [ ] Files found via BM25 search with summaries and entry points
 - [ ] Plans/specs noted (or marked absent)
 
 `{name}_extraction_tables.md`:
