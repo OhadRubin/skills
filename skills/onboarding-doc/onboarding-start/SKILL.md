@@ -9,12 +9,14 @@ Orchestrates the creation of onboarding documentation by coordinating the onboar
 
 ## Procedure
 
-1. Use `cp` to copy `create_onboarding_doc.xml` to the working directory with an appropriate name:
-   ```bash
-   cp /path/to/skill/create_onboarding_doc.xml ./auth_feature_onboarding.xml
-   ```
-   Do NOT Read + Write - use the Bash cp command to preserve the exact template.
-2. Create a todo list with phases from the XML plan
+1. Setup:
+   1.1. Use `cp` to copy `create_onboarding_doc.xml` to the working directory with an appropriate name:
+        ```bash
+        cp /path/to/skill/create_onboarding_doc.xml ./auth_feature_onboarding.xml
+        ```
+        Do NOT Read + Write - use the Bash cp command to preserve the exact template.
+   1.2. Read the copied XML file to see the phases.
+2. Create a todo list with phases from the XML plan.
 3. Execute each phase using the appropriate skill:
    - **source-material-gathering** + **key-information-extraction**: Use `onboarding-analyzer`
    - **gaps-pitfalls-identification**: Use `onboarding-gaps-verifier`
@@ -23,7 +25,7 @@ Orchestrates the creation of onboarding documentation by coordinating the onboar
 4. When a phase is finished:
    - Set `status="completed"` on the phase element in the XML file
    - Mark the corresponding todo item as completed
-5. Continue until all phases are done
+5. Continue until all phases are done.
 
 ## Artifacts Produced
 
