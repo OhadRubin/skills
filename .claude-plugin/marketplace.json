@@ -65,6 +65,15 @@
         "./skills/onboarding-doc/onboarding-gaps-verifier",
         "./skills/onboarding-doc/onboarding-writer"
       ]
+    },
+    {
+      "name": "plan-gap-finder",
+      "description": "Find conceptual gaps in plan/spec documents that prevent self-containment",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/plan-gap-finder"
+      ]
     }
   ]
 }
