@@ -22,6 +22,7 @@ Create `{name}_source_inventory.md` with the following procedure:
   ```bash
   uv run /path/to/skill/scripts/search.py -t auth -t login -t token
   ```
+  VERY IMPORTANT: YOU MUST USE search.py using uv.
 - Record top results with path and 1-2 sentence summary
 - For each file found, note:
   - File path
