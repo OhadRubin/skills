@@ -1,6 +1,6 @@
 ---
-name: gap-finder-start
-description: Find conceptual gaps in plan/spec documents. Use when user explicitly asks gap-finder-start.
+name: start-gap-finder
+description: Find conceptual gaps in plan/spec documents. Use when user explicitly asks start-gap-finder.
 ---
 
 # Plan Gap Finder

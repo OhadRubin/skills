@@ -72,7 +72,7 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/gap-finder/gap-finder-start",
+        "./skills/gap-finder/start-gap-finder",
         "./skills/gap-finder/gap-finder-1",
         "./skills/gap-finder/gap-finder-2",
         "./skills/gap-finder/gap-finder-3"

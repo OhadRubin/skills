@@ -1,6 +1,6 @@
 ---
 name: gap-finder-1
-description: Triggered by gap-finder-start.
+description: Triggered by start-gap-finder.
 ---
 
 # Plan Gap Identifier
