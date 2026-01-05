@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Multi-Agent Execution Plan Schema
+
+This schema represents a multi-agent execution plan derived from a phased plan.
+Each top-level <execution_phase> is a batch of potentially parallel agent tasks.
+Each nested <task> within an execution_phase can run as an independent Task() call.
+
+Usage:
+- Nested <task> elements are the executable units
+- Track status="pending|in_progress|completed" for each task
+- Parallel tasks have parallel="true" and background="true"
+- Sequential tasks have parallel="false" and background="false"
+- Dependencies declared via <gates> reference prior execution_phase ids
+- Prompts describe intent (WHAT), not implementation (HOW)
+
+Compatible with:
+- implement_plan.py: Reads .//task elements, updates status, records tags
+-->
+
+<multi_agent_plan>
+    <metadata>
+        <!-- High-level context -->
+        <motivation>
+            <!-- Why this plan exists; background on the problem being solved -->
+        </motivation>
+        <goal>
+            <!-- High-level goal of entire plan -->
+        </goal>
+        <description>
+            <!-- Brief description of what agents will accomplish -->
+        </description>
+    </metadata>
+
+    <!--
+    Execution phases: each contains one or more tasks
+    - If multiple tasks and parallel="true": all tasks run in background, then TaskOutput collects results
+    - If parallel="false": tasks run sequentially
+    -->
+    <execution_phase id="unique_semantic_id" status="pending">
+        <description>
+            <!-- What this batch of agents accomplishes -->
+        </description>
+
+        <!-- Dependency gates: which prior phases must complete before this one starts -->
+        <gates>
+            <gate id="prior_execution_phase_id" reason="...description..."/>
+        </gates>
+
+        <!-- Independent agent tasks that can run in parallel if parallel="true" -->
+        <task id="unique_task_id" status="pending" parallel="true" background="true">
+            <description>3-5 word summary</description>
+            <subagent_type>general-purpose</subagent_type>
+            <!--
+            Natural language prompt describing WHAT to accomplish.
+            Include:
+            - Which files to read first
+            - What transformation to perform
+            - Success criteria
+            - Any constraints or patterns to follow
+
+            Do NOT include:
+            - Implementation details (which regex, exact commands)
+            - How to use specific tools
+            - Line-by-line instructions
+            -->
+            <prompt>
+                <![CDATA[
+Natural language description of what the agent needs to accomplish.
+
+START by reading:
+1. File A - why to read it
+2. File B - why to read it
+
+THEN implement:
+- What to do
+- What success looks like
+                ]]>
+            </prompt>
+            <!-- Write targets (file paths or patterns) that this task modifies -->
+            <write_targets>
+                <target path="path/to/file.py" reason="description of why this file is modified"/>
+            </write_targets>
+        </task>
+
+        <task id="another_task_id" status="pending" parallel="true" background="true">
+            <description>Another task</description>
+            <subagent_type>general-purpose</subagent_type>
+            <prompt>
+                <![CDATA[
+Another natural language prompt...
+                ]]>
+            </prompt>
+            <write_targets>
+                <target path="path/to/other_file.py" reason="..."/>
+            </write_targets>
+        </task>
+
+        <!--
+        If tasks in this phase are parallel (parallel="true" for multiple tasks),
+        declare task_output collection before dependent phases
+        -->
+        <parallel_collection>
+            <!-- Template: these IDs will be referenced in next phase's gates -->
+            <collect_task id="unique_task_id"/>
+            <collect_task id="another_task_id"/>
+        </parallel_collection>
+
+        <!-- Success criteria for this execution phase -->
+        <success_criteria>
+            <!-- Verifiable conditions that mark this phase complete -->
+            - All tasks status="completed"
+            - No regressions to existing tests
+            - [Domain-specific criterion]
+        </success_criteria>
+    </execution_phase>
+
+    <!--
+    Sequential execution phase example:
+    - Tasks within run sequentially (parallel="false")
+    - Cannot run in background
+    - Later tasks can depend on earlier tasks in same phase
+    -->
+    <execution_phase id="sequential_phase_id" status="pending">
+        <description>Sequential implementation phase</description>
+
+        <gates>
+            <gate id="prior_phase_id" reason="Depends on prior phase completion"/>
+        </gates>
+
+        <!-- First sequential task -->
+        <task id="seq_task_1" status="pending" parallel="false" background="false">
+            <description>Implement core logic</description>
+            <subagent_type>general-purpose</subagent_type>
+            <prompt>
+                <![CDATA[
+First step: implement X in file.py
+
+START by reading:
+1. file.py - current structure
+2. spec.md - requirements
+
+THEN:
+1. Add function foo()
+2. Integrate with existing code
+                ]]>
+            </prompt>
+            <write_targets>
+                <target path="path/to/file.py" reason="Add core logic"/>
+            </write_targets>
+        </task>
+
+        <!-- Second sequential task - depends on first -->
+        <task id="seq_task_2" status="pending" parallel="false" background="false">
+            <description>Extend with error handling</description>
+            <subagent_type>general-purpose</subagent_type>
+            <prompt>
+                <![CDATA[
+Second step: add error handling to foo() from seq_task_1
+
+START by reading:
+1. file.py (from seq_task_1)
+2. error_spec.md
+
+THEN:
+1. Add try/except to foo()
+2. Return proper error responses
+                ]]>
+            </prompt>
+            <write_targets>
+                <target path="path/to/file.py" reason="Add error handling to foo()"/>
+            </write_targets>
+        </task>
+
+        <success_criteria>
+            - foo() implemented and tested
+            - Error handling in place
+            - All tests pass
+        </success_criteria>
+    </execution_phase>
+
+    <!--
+    Mixed execution phase example:
+    - Some tasks parallel (background="true"), others sequential
+    - Typical pattern: N agents in parallel, then 1 sequential verification
+    -->
+    <execution_phase id="mixed_phase_id" status="pending">
+        <description>Parallel implementation with sequential verification</description>
+
+        <gates>
+            <gate id="prior_phase_id" reason="..."/>
+        </gates>
+
+        <!-- Parallel batch: 3 independent agents -->
+        <task id="impl_plugin_a" status="pending" parallel="true" background="true">
+            <description>Implement plugin A</description>
+            <subagent_type>general-purpose</subagent_type>
+            <prompt>Add on_restore() to plugin_a.py...</prompt>
+            <write_targets>
+                <target path="examples/plugin_a/plugin.py" reason="Add on_restore() hook"/>
+            </write_targets>
+        </task>
+
+        <task id="impl_plugin_b" status="pending" parallel="true" background="true">
+            <description>Implement plugin B</description>
+            <subagent_type>general-purpose</subagent_type>
+            <prompt>Add on_restore() to plugin_b.py...</prompt>
+            <write_targets>
+                <target path="examples/plugin_b/plugin.py" reason="Add on_restore() hook"/>
+            </write_targets>
+        </task>
+
+        <task id="impl_plugin_c" status="pending" parallel="true" background="true">
+            <description>Implement plugin C</description>
+            <subagent_type>general-purpose</subagent_type>
+            <prompt>Add on_restore() to plugin_c.py...</prompt>
+            <write_targets>
+                <target path="examples/plugin_c/plugin.py" reason="Add on_restore() hook"/>
+            </write_targets>
+        </task>
+
+        <parallel_collection>
+            <collect_task id="impl_plugin_a"/>
+            <collect_task id="impl_plugin_b"/>
+            <collect_task id="impl_plugin_c"/>
+        </parallel_collection>
+
+        <!-- Sequential task after parallel batch -->
+        <task id="verify_plugins" status="pending" parallel="false" background="false">
+            <description>Verify all plugins work</description>
+            <subagent_type>general-purpose</subagent_type>
+            <prompt>
+                <![CDATA[
+Verify that all three plugins (A, B, C) implement on_restore() correctly.
+
+START by reading:
+1. examples/plugin_a/plugin.py
+2. examples/plugin_b/plugin.py
+3. examples/plugin_c/plugin.py
+
+THEN:
+1. Check each has on_restore() hook
+2. Run tests: pytest tests/test_plugins.py -v
+3. Report any failures
+                ]]>
+            </prompt>
+            <write_targets>
+                <!-- Verification task typically has no write targets -->
+            </write_targets>
+        </task>
+
+        <success_criteria>
+            - All plugins have on_restore() implemented
+            - All plugin tests pass
+            - No regressions
+        </success_criteria>
+    </execution_phase>
+
+    <!--
+    Verification/Integration phase: validates entire plan completion
+    -->
+    <execution_phase id="final_verification" status="pending">
+        <description>Final verification and documentation</description>
+
+        <gates>
+            <gate id="mixed_phase_id" reason="Depends on all prior phases"/>
+        </gates>
+
+        <task id="run_tests" status="pending" parallel="false" background="false">
+            <description>Run full test suite</description>
+            <subagent_type>general-purpose</subagent_type>
+            <prompt>
+                <![CDATA[
+Run comprehensive test suite to verify all changes work together.
+
+Command: pytest tests/ -v
+
+Report:
+1. Total tests run
+2. Pass/fail breakdown
+3. Any regressions from baseline
+4. Any new failures
+                ]]>
+            </prompt>
+            <write_targets>
+                <!-- No files modified, just verification -->
+            </write_targets>
+        </task>
+
+        <success_criteria>
+            - All tests pass (100% passing)
+            - No regressions vs baseline
+            - Feature ready for release
+        </success_criteria>
+    </execution_phase>
+
+    <!--
+    Summary of execution: document what was accomplished
+    implement_plan.py will update this section with timestamps and results
+    -->
+    <execution_summary>
+        <total_phases>3</total_phases>
+        <total_tasks>8</total_tasks>
+        <parallel_opportunities>2</parallel_opportunities>
+        <critical_path>
+            <!-- Linear dependency chain defining minimum sequential steps -->
+            execution_phase_1 → sequential_phase_2 → final_verification
+        </critical_path>
+        <write_target_analysis>
+            <!-- Group by file to identify parallelization conflicts -->
+            <!-- Multiple tasks writing to SAME file: must be sequential -->
+            <!-- Multiple tasks writing to DIFFERENT files: can be parallel -->
+            <file_group>
+                <file path="path/to/file.py" tasks="seq_task_1,seq_task_2" parallel="false"/>
+                <file path="examples/plugin_a/plugin.py" tasks="impl_plugin_a" parallel="true"/>
+                <file path="examples/plugin_b/plugin.py" tasks="impl_plugin_b" parallel="true"/>
+                <file path="examples/plugin_c/plugin.py" tasks="impl_plugin_c" parallel="true"/>
+            </file_group>
+        </write_target_analysis>
+        <expected_artifacts>
+            <!-- Files that should exist after plan completion -->
+            <artifact path="path/to/file.py" description="Core implementation"/>
+            <artifact path="examples/plugin_a/plugin.py" description="Plugin A with on_restore()"/>
+            <artifact path="examples/plugin_b/plugin.py" description="Plugin B with on_restore()"/>
+            <artifact path="examples/plugin_c/plugin.py" description="Plugin C with on_restore()"/>
+        </expected_artifacts>
+    </execution_summary>
+
+</multi_agent_plan>

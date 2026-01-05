@@ -1,0 +1,68 @@
+<plan>
+    <motivation> 
+    <!-- high level explantion for the background that this plan addresses, it should context for why the plan exists -->
+    </motivation>
+    <goal> 
+    <!-- high level explantion of the goal of this plan -->
+    </goal>
+    <!--  include in comments the phase number, but do not add it to the xml -->
+    <phase id="unique semantic description">
+        
+        <description> # high level
+        ...
+        </description>
+        <relevant_questions>
+            <question id=... reason=...>
+            <question id=... reason=...>
+        </relevant_questions>
+        <open_questions>
+            <question id=... text=...>
+        </open_questions>
+        <relevant_files>
+            <file path=..., reason=...>
+        </relevant_files>
+        <!-- a sub-phase (We can recognise it's a sub-phase by seeing it's inside a phase element), mention it in a comment
+        include in comments the sub-phase number, but do not add it to the xml -->
+        <phase id=unique semantic description>
+            <description>...</description>
+            ... other possible inner phase elements
+        </phase>
+        <artifacts> # 
+            <!-- files that are created/modified in this phase -->
+            <artifact path=..., reason_or_desc=...>
+        </artifacts>
+        <gates> 
+            <gate_element id="ids of phases that gate the start of this phase", reason="..">
+        </gates>
+        <gating>
+            <gating_element id="the ids of phases this phase is gating", reason="..">
+         </gating>
+         <non_goals> 
+            <non_goal description="..." future_phase="the phase id that implements this as a goal">
+         <non_goals>
+        <format> only if relevant <format> 
+        <success_criteria>
+        <!-- mandatory: either tests that need to pass or decisions (documented in artifacts) that need to be made in order to mark this phase/subphase as completed -->
+        </success_criteria>
+    </phase>
+    <phase>
+        <!-- each phase should have multiple (2-5) verifiable sub-phases, and the description of each sub-phase should provide enough context on what files must be read in order to implement/verify the subphase, it is highly recommended to add at least 5 relevant files to each subphase, it is recommended to add relevant artifacts from previous sub/phases   -->
+        <!-- a good plan implements code and tests it in the same subphase -->
+        <!-- a good plan has an exploration-based phase 1, in which the exact acceptance criteria for the full plan is created  -->
+        <!-- if needed, subphases may also have child phase elements, and sub-sub-phases are the only elements that do not require a success_criteria  -->
+        <!-- every sub-phase should have at least 1 artifact associated with it (can be a glob pattern) or reference the result of a previous phase -->
+        ...
+        <phase> 
+        ...
+        </phase>
+        <phase> 
+        ...
+        </phase>
+        <phase> 
+        ...
+        </phase>
+        
+    ...
+    </phase>
+
+<plan>

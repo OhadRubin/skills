@@ -1,0 +1,1 @@
+this entire folder is a draft of a skill. ignore it.
