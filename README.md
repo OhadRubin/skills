@@ -15,6 +15,7 @@ This repository contains Ohad's custom skills for Claude.
 
 - [python-file-splitter](./skills/python-file-splitter): Split large Python modules into smaller, well-organized files
 - [skill-creator](./skills/skill-creator): Create a new skill
+- [skill-creator-multi](./skills/skill-creator-multi): Create multi-phase skills with orchestrated sequential execution
 - [skill-spec-generator](./skills/skill-spec-generator): Generate structured skill specifications for independent skill creators
 - [diff-since-my-commit](./skills/diff-since-my-commit): Show changes to a git branch since your last commit, filtered to only files you touched
 - [agent-report](./skills/agent-report): Extract and display the final message from a Claude agent JSONL file

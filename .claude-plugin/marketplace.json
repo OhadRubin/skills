@@ -28,6 +28,15 @@
       ]
     },
     {
+      "name": "skill-creator-multi",
+      "description": "Create multi-phase skills with orchestrated sequential execution",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/skill-creator-multi"
+      ]
+    },
+    {
       "name": "skill-spec-generator",
       "description": "Generate structured skill specifications for independent skill creators",
       "source": "./",
