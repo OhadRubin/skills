@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "plan-gap-finder",
+      "name": "gap-finder",
       "description": "Find conceptual gaps in plan/spec documents that prevent self-containment",
       "source": "./",
       "strict": false,
