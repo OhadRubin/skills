@@ -1,11 +1,11 @@
 ---
-name: plan-gap-refiner
-description: Phase 3 of plan-gap-finder. Output only CORE items. Triggered by plan-gap-start.
+name: gap-finder-3
+description: Triggered by gap-finder-start.
 ---
 
 # Plan Gap Refiner
 
-Output only CORE items from Phase 2 in final format.
+Output only CORE items from Step 2 in final format.
 
 ## Output format
 

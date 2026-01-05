@@ -72,10 +72,10 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/plan-gap-finder/plan-gap-start",
-        "./skills/plan-gap-finder/plan-gap-identifier",
-        "./skills/plan-gap-finder/plan-gap-critic",
-        "./skills/plan-gap-finder/plan-gap-refiner"
+        "./skills/gap-finder/gap-finder-start",
+        "./skills/gap-finder/gap-finder-1",
+        "./skills/gap-finder/gap-finder-2",
+        "./skills/gap-finder/gap-finder-3"
       ]
     }
   ]

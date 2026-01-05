@@ -1,11 +1,11 @@
 ---
-name: plan-gap-critic
-description: Phase 2 of plan-gap-finder. Self-critique the raw gaps. Triggered by plan-gap-start.
+name: gap-finder-2
+description: Triggered by gap-finder-start.
 ---
 
 # Plan Gap Critic
 
-Review each gap from Phase 1 output and mark CORE or NOT CORE.
+Review each gap from Step 1 output and mark CORE or NOT CORE.
 
 ## Decision filters
 
@@ -32,7 +32,7 @@ Review each gap from Phase 1 output and mark CORE or NOT CORE.
 ## Output format
 
 ```
-# Phase 2: Critiqued Gaps
+# Step 2: Critiqued Gaps
 
 | Gap | Verdict | Reason |
 |-----|---------|--------|

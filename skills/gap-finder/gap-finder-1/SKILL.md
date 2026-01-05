@@ -1,6 +1,6 @@
 ---
-name: plan-gap-identifier
-description: Phase 1 of plan-gap-finder. Generate raw list of potential gaps. Triggered by plan-gap-start.
+name: gap-finder-1
+description: Triggered by gap-finder-start.
 ---
 
 # Plan Gap Identifier
@@ -21,7 +21,7 @@ Terms or claims used but never defined/justified — things that block understan
 ## Output format
 
 ```
-# Phase 1: Raw Gaps
+# Step 1: Raw Gaps
 
 - [Line 42] "foo" - undefined
 - [Line 87] "X enables Y" - asserted
